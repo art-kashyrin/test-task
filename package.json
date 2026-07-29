@@ -1,13 +1,33 @@
 {
-  "name": "test-task",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "users-by-city",
+  "private": true,
+  "packageManager": "pnpm@10.12.3",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "pnpm -r --workspace-concurrency=1 typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "generate:api": "pnpm --filter @app/server openapi:emit && pnpm --filter @app/client api:types",
+    "check:api": "pnpm generate:api && git diff --exit-code -- server/openapi.json client/src/api/schema.d.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.12.3"
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "eslint": "9.39.5",
+    "@eslint/js": "9.39.5",
+    "typescript-eslint": "8.65.0",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-prettier": "5.5.6",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.9.6",
+    "globals": "17.8.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "bcrypt",
+      "esbuild",
+      "@scarf/scarf"
+    ]
+  }
 }

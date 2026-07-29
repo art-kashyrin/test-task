@@ -1,0 +1,6 @@
+client/src/api/schema.d.ts
+server/openapi.json
+pnpm-lock.yaml
+**/dist/**
+
+.omc/

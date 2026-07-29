@@ -1,0 +1,67 @@
+x-app-env: &app-env
+  DATABASE_HOST: postgres
+  DATABASE_PORT: '5432'
+  DATABASE_USER: ${POSTGRES_USER:-app}
+  DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-app_dev_password}
+  DATABASE_NAME: ${POSTGRES_DB:-app}
+  JWT_SECRET: ${JWT_SECRET:-dev-only-insecure-secret-change-me}
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-app_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 3s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+  migrate:
+    image: app-server:local
+    pull_policy: never
+    command: ['node', 'dist/database/run-migrations.js']
+    environment:
+      <<: *app-env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: 'no'
+
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    image: app-server:local
+    environment:
+      <<: *app-env
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1d}
+      API_PORT: '3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    image: app-client:local
+    ports:
+      - '${CLIENT_PORT:-8080}:80'
+    depends_on:
+      api:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  pgdata:

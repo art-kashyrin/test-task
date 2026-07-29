@@ -1,0 +1,7 @@
+process.env.OPENAPI_EMIT = '1'
+process.env.JWT_SECRET ??= 'CODEGEN_ONLY_NOT_A_SECRET'
+process.env.DATABASE_HOST ??= 'CODEGEN_ONLY_HOST'
+process.env.DATABASE_PORT ??= '5432'
+process.env.DATABASE_USER ??= 'CODEGEN_ONLY_USER'
+process.env.DATABASE_PASSWORD ??= 'CODEGEN_ONLY_PASSWORD'
+process.env.DATABASE_NAME ??= 'CODEGEN_ONLY_DB'

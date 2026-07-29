@@ -1,0 +1,39 @@
+{
+  "name": "@app/server",
+  "private": true,
+  "scripts": {
+    "build": "nest build",
+    "start": "node dist/main.js",
+    "start:dev": "nest start --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "openapi:emit": "tsx src/openapi/generate-openapi.ts",
+    "migration:run": "tsx src/database/run-migrations.ts",
+    "migration:run:dist": "node dist/database/run-migrations.js",
+    "migration:revert": "tsx src/database/revert-migration.ts"
+  },
+  "dependencies": {
+    "@nestjs/common": "11",
+    "@nestjs/core": "11.1.28",
+    "@nestjs/jwt": "11.0.2",
+    "@nestjs/passport": "11.0.5",
+    "@nestjs/platform-express": "11",
+    "@nestjs/swagger": "11.4.6",
+    "@nestjs/typeorm": "11.0.3",
+    "bcrypt": "6.0.0",
+    "class-transformer": "0.5.1",
+    "class-validator": "0.15.1",
+    "passport": "0.7.0",
+    "passport-jwt": "4.0.1",
+    "pg": "8.22.0",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2",
+    "typeorm": "1.1.0"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "11.0.24",
+    "@types/bcrypt": "6.0.0",
+    "@types/node": "26.1.2",
+    "@types/passport-jwt": "4.0.1",
+    "tsx": "4.23.1"
+  }
+}
